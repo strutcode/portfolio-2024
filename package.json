@@ -2,7 +2,7 @@
   "name": "portfolio",
   "version": "1.0.0",
   "description": "My personal portfolio",
-  "main": "index.js",
+  "type": "module",
   "repository": "https://github.com/strutcode/portfolio-2024",
   "author": "Tristan Shelton <tristan.m.shelton@gmail.com>",
   "license": "UNLICENSED",
@@ -14,6 +14,7 @@
     "@biomejs/biome": "1.9.4",
     "@types/bun": "^1.1.12",
     "@vitejs/plugin-vue": "^5.1.4",
+    "postcss": "^8.4.47",
     "prettier": "^3.3.3",
     "typescript": "^5.6.3",
     "vite": "^5.4.10"
