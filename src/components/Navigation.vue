@@ -8,24 +8,28 @@
   </nav>
 </template>
 
-<style>
+<style scoped>
   nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     display: flex;
     justify-content: space-around;
     align-items: center;
     padding: 1rem;
-  }
 
-  nav img {
-    height: 70px;
-  }
+    img {
+      height: 70px;
+    }
 
-  nav a {
-    color: white;
-    text-decoration: none;
-  }
+    ::v-deep a {
+      color: white;
+      text-decoration: none;
+    }
 
-  nav a:hover {
-    text-decoration: underline;
+    ::v-deep a:hover {
+      text-decoration: underline;
+    }
   }
 </style>

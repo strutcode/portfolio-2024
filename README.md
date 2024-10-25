@@ -23,6 +23,9 @@ I like to be clean even with personal projects, which means having good formatti
 
 Similarly, Prettier provides pretty good formatting with just enough available configuration for smaller code bases.
 
+**WebGL/TWGL**
+WebGL is fun and makes for visually interesting effects, and TWGL is the fastest, lightest weight library for taking full advantage of the raw power of WebGL. Libraries like Three.js or the very excellent Babylon.js provide powerful higher level APIs but with a fairly massive footprint that just didn't seem necessary here.
+
 # Deployment Strategy
 
 The eagle-eyed reviewer would notice that the web server is running insecurely over http; that's because in production it will be running behind a pre-configured reverse-proxy server with authenticate certificates.

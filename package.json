@@ -8,6 +8,7 @@
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
+    "twgl.js": "^5.5.4",
     "vue": "^3.5.12",
     "vue-router": "^4.4.5"
   },
