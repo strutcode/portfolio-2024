@@ -8,6 +8,13 @@ export default defineConfig({
   // Directory to serve as plain static assets.
   publicDir: 'public',
 
+  resolve: {
+    alias: {
+      // Alias the @ symbol to the src/ directory.
+      '@': '/src',
+    },
+  },
+
   // Build options
   build: {
     outDir: 'dist',
