@@ -7,6 +7,7 @@ export default abstract class Scene {
 
   // This prevents unnecessarily costly rebinds on every frame drawn
   private boundRender = this.render.bind(this)
+  private renderHandle?: number
   private previousTime = performance.now()
 
   public constructor(canvas: HTMLCanvasElement) {
@@ -62,10 +63,14 @@ export default abstract class Scene {
 
     this.previousTime = presentTime
 
-    requestAnimationFrame(this.boundRender)
+    this.renderHandle = requestAnimationFrame(this.boundRender)
   }
 
   public dispose() {
+    if (this.renderHandle) {
+      cancelAnimationFrame(this.renderHandle)
+    }
+
     if (this.context) {
       const gl = this.context
 
@@ -75,10 +80,10 @@ export default abstract class Scene {
 
       // If the lose context extension is available clean up after ourselves
       gl.getExtension('WEBGL_lose_context')?.loseContext()
-
-      // Clear the context to stop the animation frame loop
-      this.context = null
     }
+
+    // Clear the context to stop the animation frame loop
+    this.context = null
   }
 
   protected abstract animate(deltaSeconds: number): void

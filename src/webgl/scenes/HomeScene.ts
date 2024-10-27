@@ -15,7 +15,11 @@ import fs from './particle.fs.glsl?raw'
 
 /** A simple 3D particle */
 export class Particle {
-  protected static programInfo: ReturnType<typeof createProgramInfo>
+  protected static programInfo?: ReturnType<typeof createProgramInfo>
+
+  public static dispose() {
+    this.programInfo = undefined
+  }
 
   public worldTransform = m4.scale(m4.translate(m4.identity(), [0, 0, -5]), [0.01, 0.01, 0.01])
   protected bufferInfo: ReturnType<typeof primitives.createXYQuadBufferInfo>
@@ -31,6 +35,8 @@ export class Particle {
   }
 
   public render(scene: Scene) {
+    if (!Particle.programInfo) return
+
     const uniforms = {
       worldViewProjection: m4.multiply(scene.camera.viewProjection, this.worldTransform),
     }
@@ -61,6 +67,13 @@ export default class HomeScene extends Scene {
     this.createParticles()
   }
 
+  public dispose() {
+    super.dispose()
+
+    this.particles = []
+    Particle.dispose()
+  }
+
   public createParticles() {
     const gl = this.getContext()
     const range = 1000
@@ -83,6 +96,7 @@ export default class HomeScene extends Scene {
         particle.worldTransform,
         Math.random() * Math.PI * 2 * deltaSeconds,
       )
+
       particle.render(this)
     }
   }
