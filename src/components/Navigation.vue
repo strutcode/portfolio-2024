@@ -18,6 +18,7 @@
     justify-content: space-around;
     align-items: center;
     padding: 1rem;
+    z-index: +10;
 
     img {
       height: 70px;
