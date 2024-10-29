@@ -1,5 +1,5 @@
 <template>
-  <nav>
+  <nav class="header">
     <RouterLink to="/">Home</RouterLink>
     <RouterLink to="/about">About</RouterLink>
     <img src="@/assets/logo.svg" alt="Logo" />
