@@ -1,12 +1,12 @@
 <template>
   <Navigation />
-  <RouterView v-slot="{ Component }">
-    <transition name="fade">
-      <div class="body">
+  <div class="body">
+    <RouterView v-slot="{ Component }">
+      <transition name="fade" mode="out-in">
         <component :is="Component" />
-      </div>
-    </transition>
-  </RouterView>
+      </transition>
+    </RouterView>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -21,7 +21,7 @@
 
   .fade-enter-active,
   .fade-leave-active {
-    transition: opacity 0.5s ease;
+    transition: opacity 0.12s ease;
   }
 
   .fade-enter-from,
