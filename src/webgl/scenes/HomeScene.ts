@@ -21,7 +21,7 @@ export class Particle {
     Particle.programInfo = undefined
   }
 
-  public worldTransform = m4.scale(m4.translate(m4.identity(), [0, 0, -5]), [0.01, 0.01, 0.01])
+  public worldTransform = m4.identity()
   protected bufferInfo: ReturnType<typeof primitives.createXYQuadBufferInfo>
 
   public constructor(gl: WebGLRenderingContext) {
@@ -31,7 +31,7 @@ export class Particle {
     }
 
     // Create a buffer for the geometry
-    this.bufferInfo = primitives.createXYQuadBufferInfo(gl)
+    this.bufferInfo = primitives.createXYQuadBufferInfo(gl, 0.02)
   }
 
   public render(scene: Scene) {
@@ -76,13 +76,17 @@ export default class HomeScene extends Scene {
 
   public createParticles() {
     const gl = this.getContext()
-    const range = 1000
+    const range = 20
 
     for (let i = 0; i < 1000; i++) {
       const particle = new Particle(gl)
       const x = Math.random() * range - range * 0.5
       const y = Math.random() * range * 0.5 - range * 0.25
 
+      particle.worldTransform = m4.rotateX(
+        particle.worldTransform,
+        Math.random() * Math.PI * 2,
+      )
       particle.worldTransform = m4.translate(particle.worldTransform, [x, y, 0])
 
       this.particles.push(particle)
@@ -91,10 +95,9 @@ export default class HomeScene extends Scene {
 
   public animate(deltaSeconds: number) {
     for (const particle of this.particles) {
-      particle.worldTransform = m4.translate(particle.worldTransform, [0, deltaSeconds, 0])
       particle.worldTransform = m4.rotateX(
         particle.worldTransform,
-        Math.random() * Math.PI * 2 * deltaSeconds,
+        deltaSeconds * 3,
       )
 
       particle.render(this)
