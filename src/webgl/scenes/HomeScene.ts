@@ -38,6 +38,7 @@ export class Particle {
     if (!Particle.programInfo) return
 
     const uniforms = {
+      worldView: m4.multiply(scene.camera.view, this.worldTransform),
       worldViewProjection: m4.multiply(scene.camera.viewProjection, this.worldTransform),
     }
 

@@ -8,6 +8,7 @@ export default class Camera {
   public aspect = 16 / 9
 
   /** The output matrix of the camera */
+  public view = m4.identity()
   public viewProjection = m4.identity()
 
   public constructor(canvas: HTMLCanvasElement) {
@@ -32,10 +33,10 @@ export default class Camera {
     const up = [0, 1, 0]
 
     // Create the view transformation used to place objects in the camera's line of sight
-    const view = m4.inverse(m4.lookAt(eye, target, up))
+    this.view = m4.inverse(m4.lookAt(eye, target, up))
 
     // Combine the view and projection transformations into a camera lens like transformation
-    this.viewProjection = m4.multiply(projection, view)
+    this.viewProjection = m4.multiply(projection, this.view)
   }
 
   /** Update the aspect ratio, useful to use on window resize for example */
