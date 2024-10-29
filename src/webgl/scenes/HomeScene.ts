@@ -79,7 +79,7 @@ export default class HomeScene extends Scene {
     const gl = this.getContext()
     const range = 20
 
-    for (let i = 0; i < 1000; i++) {
+    for (let i = 0; i < 10000; i++) {
       const particle = new Particle(gl)
       const x = Math.random() * range - range * 0.5
       const y = Math.random() * range * 0.5 - range * 0.25

@@ -17,20 +17,21 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    padding: 1rem;
+    padding: 1.5rem 0;
     z-index: +10;
 
     img {
       height: 70px;
     }
+  }
 
-    ::v-deep a {
-      color: white;
-      text-decoration: none;
-    }
+  ::v-deep a {
+    font-size: 2.1em;
+    color: #ccc;
+    text-decoration: none;
+  }
 
-    ::v-deep a:hover {
-      text-decoration: underline;
-    }
+  ::v-deep a:hover {
+    text-decoration: underline;
   }
 </style>

@@ -14,9 +14,9 @@
   import Navigation from './components/Navigation.vue'
 </script>
 
-<style>
+<style scoped>
   .body {
-    padding-top: 60px;
+    padding: 5rem;
   }
 
   .fade-enter-active,
