@@ -14,6 +14,9 @@
 	},
 	"linter": {
 		"enabled": true,
+		"ignore": [
+			"node_modules"
+		],
 		"rules": {
 			"recommended": true
 		}

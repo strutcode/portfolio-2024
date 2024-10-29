@@ -6,7 +6,7 @@
 <script setup lang="ts">
   import { onMounted, onUnmounted, useTemplateRef } from 'vue'
   import HomeScene from '../webgl/scenes/HomeScene'
-  import Scene from '../webgl/Scene'
+  import type Scene from '../webgl/Scene'
 
   const canvas = useTemplateRef('canvas')
   let scene: Scene | null = null

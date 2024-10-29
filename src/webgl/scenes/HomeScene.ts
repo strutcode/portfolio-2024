@@ -18,7 +18,7 @@ export class Particle {
   protected static programInfo?: ReturnType<typeof createProgramInfo>
 
   public static dispose() {
-    this.programInfo = undefined
+    Particle.programInfo = undefined
   }
 
   public worldTransform = m4.scale(m4.translate(m4.identity(), [0, 0, -5]), [0.01, 0.01, 0.01])

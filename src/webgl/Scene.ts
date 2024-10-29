@@ -4,6 +4,7 @@ export default abstract class Scene {
   public camera: Camera
 
   protected context: WebGLRenderingContext | null
+  protected canvas: HTMLCanvasElement
 
   // This prevents unnecessarily costly rebinds on every frame drawn
   private boundRender = this.render.bind(this)
@@ -12,11 +13,17 @@ export default abstract class Scene {
 
   public constructor(canvas: HTMLCanvasElement) {
     // Initialize WebGL
-    const gl = (this.context = canvas.getContext('webgl'))
+    this.context = canvas.getContext('webgl')
 
-    if (!gl) {
+    if (!this.context) {
       throw new Error('Unable to initialize WebGL. Your browser or machine may not support it.')
     }
+
+    if (this.context.canvas instanceof OffscreenCanvas) {
+      throw new Error('OffscreenCanvas is not supported')
+    }
+
+    this.canvas = this.context.canvas
 
     // Create a simple camera
     this.camera = new Camera(canvas)
@@ -26,7 +33,11 @@ export default abstract class Scene {
   }
 
   public getContext() {
-    return this.context!
+    if (!this.context) {
+      throw new Error('getContext: Invalid scene')
+    }
+
+    return this.context
   }
 
   public render() {
@@ -36,10 +47,10 @@ export default abstract class Scene {
     const gl = this.context
 
     // Set up display
-    gl.canvas.width = window.innerWidth
-    gl.canvas.height = window.innerHeight
-    this.camera.setAspectRatio(gl.canvas.clientWidth, gl.canvas.clientHeight)
-    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height)
+    this.canvas.width = window.innerWidth
+    this.canvas.height = window.innerHeight
+    this.camera.setAspectRatio(this.canvas.clientWidth, this.canvas.clientHeight)
+    gl.viewport(0, 0, this.canvas.width, this.canvas.height)
 
     // Clear the canvas
     gl.clear(gl.COLOR_BUFFER_BIT)
