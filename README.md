@@ -26,6 +26,17 @@ Similarly, Prettier provides pretty good formatting with just enough available c
 **WebGL/TWGL**
 WebGL is fun and makes for visually interesting effects, and TWGL is the fastest, lightest weight library for taking full advantage of the raw power of WebGL. Libraries like Three.js or the very excellent Babylon.js provide powerful higher level APIs but with a fairly massive footprint that just didn't seem necessary here.
 
+# Usage
+| Command           | Description                                             |
+|-------------------|---------------------------------------------------------|
+| `bun install`     | Installs all the dependencies required for the project. |
+| `bun run dev`     | Starts the development server.                          |
+| `bun run build`   | Builds the project for production.                      |
+| `bun run preview` | Previews the production build locally.                  |
+| `./server.sh`     | Starts the companion server.                            |
+
 # Deployment Strategy
 
-The eagle-eyed reviewer would notice that the web server is running insecurely over http; that's because in production it will be running behind a pre-configured reverse-proxy server with authenticate certificates.
+The eagle-eyed reviewer would notice that the web server is running insecurely over http; that's because in production it will be running behind a pre-configured reverse-proxy server with authentic certificates.
+
+In practice all ports except 80 and 443 will be closed, and the reverse proxy will also be responsible for serving pre-built files from the `dist` folder. The Vite dev server is not to be used in production.
