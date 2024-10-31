@@ -25,13 +25,13 @@
     }
   }
 
-  ::v-deep a {
+  :deep(a) {
     font-size: 2.1em;
     color: #ccc;
     text-decoration: none;
   }
 
-  ::v-deep a:hover {
+  :deep(a:hover) {
     text-decoration: underline;
   }
 </style>
