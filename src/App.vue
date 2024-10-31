@@ -16,12 +16,12 @@
 
 <style scoped>
   .body {
-    padding: 5rem;
+    padding: 8rem 5rem;
   }
 
   .fade-enter-active,
   .fade-leave-active {
-    transition: opacity 0.12s ease;
+    transition: opacity 0.18s ease;
   }
 
   .fade-enter-from,
