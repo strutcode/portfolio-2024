@@ -3,7 +3,7 @@
     <RouterLink to="/">Home</RouterLink>
     <RouterLink to="/about">About</RouterLink>
     <img src="@/assets/logo.svg" alt="Logo" />
-    <RouterLink to="/projects">Projects</RouterLink>
+    <RouterLink to="/portfolio">Portfolio</RouterLink>
     <RouterLink to="/contact">Contact</RouterLink>
   </nav>
 </template>
