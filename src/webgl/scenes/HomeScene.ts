@@ -51,7 +51,7 @@ export default class HomeScene extends Scene {
       m4.rotateX(mat, randfRange(0, Math.PI * 2), mat)
     }
 
-    const arrays = primitives.createCubeVertices(0.1)
+    const arrays = primitives.createCubeVertices(0.03)
     Object.assign(arrays, {
       instanceWorld: {
         numComponents: 16,
@@ -68,6 +68,7 @@ export default class HomeScene extends Scene {
       programInfo,
       bufferInfo,
       vertexArrayInfo,
+      instanceWorlds,
     }
 
     console.log(vertexArrayInfo)
@@ -75,11 +76,19 @@ export default class HomeScene extends Scene {
 
   public animate(deltaSeconds: number) {
     const gl = this.getContext()
-    const { programInfo, vertexArrayInfo } = this.data
+    const { programInfo, vertexArrayInfo, instanceWorlds } = this.data
     const uniforms = {
       view: this.camera.view,
       viewProjection: this.camera.viewProjection,
     }
+
+    for (let i = 0; i < this.particles; ++i) {
+      const mat = new Float32Array(instanceWorlds.buffer, i * 16 * 4, 16)
+      m4.rotateX(mat, deltaSeconds * Math.random(), mat)
+    }
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.data.bufferInfo.attribs.instanceWorld.buffer)
+    gl.bufferSubData(gl.ARRAY_BUFFER, 0, instanceWorlds)
 
     gl.useProgram(programInfo.program)
     setBuffersAndAttributes(gl, programInfo, vertexArrayInfo)
