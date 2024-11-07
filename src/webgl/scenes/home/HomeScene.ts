@@ -10,7 +10,7 @@ import {
   setUniforms,
 } from 'twgl.js'
 
-import Scene from '../Scene'
+import Scene from '../../Scene'
 
 // Shaders -- using ?raw to import as string and avoid syntax errors
 import vs from './particle.vs.glsl?raw'
