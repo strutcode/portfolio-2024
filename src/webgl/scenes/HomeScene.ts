@@ -1,5 +1,3 @@
-import Scene from '../Scene'
-
 import {
   addExtensionsToContext,
   createBufferInfoFromArrays,
@@ -12,7 +10,9 @@ import {
   setUniforms,
 } from 'twgl.js'
 
-// Shaders
+import Scene from '../Scene'
+
+// Shaders -- using ?raw to import as string and avoid syntax errors
 import vs from './particle.vs.glsl?raw'
 import fs from './particle.fs.glsl?raw'
 
@@ -24,6 +24,7 @@ export default class HomeScene extends Scene {
   public constructor(canvas: HTMLCanvasElement) {
     super(canvas)
 
+    // Load required WebGL extensions on start
     addExtensionsToContext(this.getContext())
 
     this.createParticles()
@@ -33,16 +34,24 @@ export default class HomeScene extends Scene {
     super.dispose()
   }
 
+  /** Creates the particles used in the animation */
   public createParticles() {
     const gl = this.getContext()
 
+    /** The total number of particles */
     const numInstances = this.particles
-    const instanceWorlds = new Float32Array(numInstances * 16)
-    const randfRange = (x, y) => x + Math.random() * (y - x)
+    /** The world matrices of each particle as a flat array of mat4 */
+    const instanceWorlds = new Float32Array(numInstances * 16) // 4x4 = 16 floats per particle
+    /** Get a random float between `x` and `y` */
+    const randfRange = (x: number, y: number) => x + Math.random() * (y - x)
+    /** The spread range of particles on initial spawn */
     const range = 20
 
     for (let i = 0; i < numInstances; ++i) {
+      // Extract the world matrix of the current particle as a buffer view
       const mat = new Float32Array(instanceWorlds.buffer, i * 16 * 4, 16)
+
+      // Randomize the position and rotation of the particle
       m4.translation(
         [randfRange(-range, range), randfRange(-range, range), randfRange(0, range)],
         mat,
@@ -51,7 +60,10 @@ export default class HomeScene extends Scene {
       m4.rotateX(mat, randfRange(0, Math.PI * 2), mat)
     }
 
+    // Create the vertex arrays for the particles
     const arrays = primitives.createCubeVertices(0.03)
+
+    // Add the instance world matrix as an attribute
     Object.assign(arrays, {
       instanceWorld: {
         numComponents: 16,
@@ -60,39 +72,62 @@ export default class HomeScene extends Scene {
       },
     })
 
+    // Create the program and buffer info
     const programInfo = createProgramInfo(gl, [vs, fs])
     const bufferInfo = createBufferInfoFromArrays(gl, arrays)
     const vertexArrayInfo = createVertexArrayInfo(gl, programInfo, bufferInfo)
 
+    // Save the data for use in the render loop
     this.data = {
       programInfo,
       bufferInfo,
       vertexArrayInfo,
       instanceWorlds,
     }
-
-    console.log(vertexArrayInfo)
   }
 
+  /** Called by the base Scene class on render */
   public animate(deltaSeconds: number) {
+    this.updateParticles(deltaSeconds)
+    this.renderParticles()
+  }
+
+  private updateParticles(deltaSeconds: number) {
     const gl = this.getContext()
-    const { programInfo, vertexArrayInfo, instanceWorlds } = this.data
+    const { instanceWorlds } = this.data
+
+    // Iterate every particle and rotate it slightly
+    for (let i = 0; i < this.particles; ++i) {
+      const mat = new Float32Array(instanceWorlds.buffer, i * 16 * 4, 16)
+
+      // Rotate the particle around the X axis by a random amount between 0.0 and 1.0 scaled to the frame rate (deltaSeconds)
+      m4.rotateX(mat, deltaSeconds * Math.random(), mat)
+    }
+
+    // Update the buffer with the new world matrices
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.data.bufferInfo.attribs.instanceWorld.buffer)
+    gl.bufferSubData(gl.ARRAY_BUFFER, 0, instanceWorlds)
+  }
+
+  private renderParticles() {
+    // Sets up the context -- the uniforms and buffer info used for rendering and the original world matrix attribute array
+    const gl = this.getContext()
+    const { programInfo, vertexArrayInfo } = this.data
     const uniforms = {
       view: this.camera.view,
       viewProjection: this.camera.viewProjection,
     }
 
-    for (let i = 0; i < this.particles; ++i) {
-      const mat = new Float32Array(instanceWorlds.buffer, i * 16 * 4, 16)
-      m4.rotateX(mat, deltaSeconds * Math.random(), mat)
-    }
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.data.bufferInfo.attribs.instanceWorld.buffer)
-    gl.bufferSubData(gl.ARRAY_BUFFER, 0, instanceWorlds)
-
+    // Activate the shaders
     gl.useProgram(programInfo.program)
+
+    // Set the buffers and attributes
     setBuffersAndAttributes(gl, programInfo, vertexArrayInfo)
+
+    // Update the uniforms
     setUniforms(programInfo, uniforms)
+
+    // Draw the entire instance buffer
     drawBufferInfo(
       gl,
       vertexArrayInfo,
