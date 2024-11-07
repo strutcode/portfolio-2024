@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <canvas ref="canvas"></canvas>
+  <canvas ref="canvas"></canvas>
+  <div class="content">
     <h1>Building Awesome Stuff</h1>
   </div>
 </template>
@@ -34,5 +34,10 @@
     left: 0;
     width: 100%;
     height: 100%;
+  }
+
+  .content {
+    position: relative;
+    z-index: +1;
   }
 </style>
