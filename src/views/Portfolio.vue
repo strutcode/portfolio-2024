@@ -10,6 +10,14 @@
         <h2>Project 1</h2>
         <img src="../assets/placeholder.jpg" alt="Project 1" />
       </div>
+      <div class="slide">
+        <h2>Project 2</h2>
+        <img src="../assets/placeholder.jpg" alt="Project 2" />
+      </div>
+      <div class="slide">
+        <h2>Project 3</h2>
+        <img src="../assets/placeholder.jpg" alt="Project 3" />
+      </div>
     </div>
   </div>
 </template>
@@ -25,11 +33,12 @@
   }
 
   .slide {
-    flex: 0 0 200px;
-    height: 280px;
+    flex: 0 0 220px;
+    height: 300px;
     scroll-snap-align: start;
     background: rgba(255, 255, 255, 0.1);
     padding: 1rem;
+    margin: 0 1rem;
   }
 
   img {
