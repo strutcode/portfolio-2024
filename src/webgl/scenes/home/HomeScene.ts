@@ -16,9 +16,12 @@ import Scene from '../../Scene'
 import vs from './particle.vs.glsl?raw'
 import fs from './particle.fs.glsl?raw'
 
+import points from './test.json'
+
 /** A fancy sparkling shimmery effect for the home page */
 export default class HomeScene extends Scene {
-  private particles = 10000
+  private particles = 5000
+  private shape = new Float32Array(points)
   private data: Record<any, any> = {}
 
   public constructor(canvas: HTMLCanvasElement) {
@@ -28,6 +31,8 @@ export default class HomeScene extends Scene {
     addExtensionsToContext(this.getContext())
 
     this.createParticles()
+
+    this.camera.position = [3, 3, -3]
   }
 
   public dispose() {
@@ -99,9 +104,17 @@ export default class HomeScene extends Scene {
     // Iterate every particle and rotate it slightly
     for (let i = 0; i < this.particles; ++i) {
       const mat = new Float32Array(instanceWorlds.buffer, i * 16 * 4, 16)
+      const target = new Float32Array(this.shape.buffer, i * 3 * 4, 3)
+      const diff = [target[0] - mat[12], target[1] - mat[13], target[2] - mat[14]]
+
+      diff[0] *= deltaSeconds
+      diff[1] *= deltaSeconds
+      diff[2] *= deltaSeconds
+
+      m4.translate(mat, diff, mat)
 
       // Rotate the particle around the X axis by a random amount between 0.0 and 1.0 scaled to the frame rate (deltaSeconds)
-      m4.rotateX(mat, deltaSeconds * Math.random(), mat)
+      // m4.rotateX(mat, deltaSeconds * Math.random(), mat)
     }
 
     // Update the buffer with the new world matrices
