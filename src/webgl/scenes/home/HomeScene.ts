@@ -16,23 +16,28 @@ import Scene from '../../Scene'
 import vs from './particle.vs.glsl?raw'
 import fs from './particle.fs.glsl?raw'
 
-import points from './test.json'
+import points from './test2.json'
+import OrbitCamera from '../../OrbitCamera'
 
 /** A fancy sparkling shimmery effect for the home page */
 export default class HomeScene extends Scene {
-  private particles = 5000
+  public camera: OrbitCamera
+
+  private particles = 10000
   private shape = new Float32Array(points)
   private data: Record<any, any> = {}
 
   public constructor(canvas: HTMLCanvasElement) {
     super(canvas)
 
+    this.camera = new OrbitCamera(canvas)
+
     // Load required WebGL extensions on start
     addExtensionsToContext(this.getContext())
 
     this.createParticles()
 
-    this.camera.position = [0, -3, 1]
+    this.camera.distance = 2.5
   }
 
   public dispose() {
@@ -93,8 +98,13 @@ export default class HomeScene extends Scene {
 
   /** Called by the base Scene class on render */
   public animate(deltaSeconds: number) {
+    this.updateCamera(deltaSeconds)
     this.updateParticles(deltaSeconds)
     this.renderParticles()
+  }
+
+  public updateCamera(deltaSeconds: number) {
+    this.camera.azimuth += deltaSeconds * 0.1
   }
 
   private updateParticles(deltaSeconds: number) {
