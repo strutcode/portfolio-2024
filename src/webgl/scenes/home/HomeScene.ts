@@ -32,7 +32,7 @@ export default class HomeScene extends Scene {
 
     this.createParticles()
 
-    this.camera.position = [3, 3, -3]
+    this.camera.position = [0, -3, 1]
   }
 
   public dispose() {
@@ -66,7 +66,7 @@ export default class HomeScene extends Scene {
     }
 
     // Create the vertex arrays for the particles
-    const arrays = primitives.createCubeVertices(0.03)
+    const arrays = primitives.createCubeVertices(0.01)
 
     // Add the instance world matrix as an attribute
     Object.assign(arrays, {
@@ -107,14 +107,14 @@ export default class HomeScene extends Scene {
       const target = new Float32Array(this.shape.buffer, i * 3 * 4, 3)
       const diff = [target[0] - mat[12], target[1] - mat[13], target[2] - mat[14]]
 
-      diff[0] *= deltaSeconds
-      diff[1] *= deltaSeconds
-      diff[2] *= deltaSeconds
+      diff[0] *= deltaSeconds * 2
+      diff[1] *= deltaSeconds * 2
+      diff[2] *= deltaSeconds * 2
 
       m4.translate(mat, diff, mat)
 
       // Rotate the particle around the X axis by a random amount between 0.0 and 1.0 scaled to the frame rate (deltaSeconds)
-      // m4.rotateX(mat, deltaSeconds * Math.random(), mat)
+      m4.rotateX(mat, deltaSeconds * Math.random(), mat)
     }
 
     // Update the buffer with the new world matrices
