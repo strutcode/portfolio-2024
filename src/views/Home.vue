@@ -1,7 +1,9 @@
 <template>
-  <canvas ref="canvas"></canvas>
-  <div class="content">
-    <h1>Building Awesome Stuff</h1>
+  <div>
+    <canvas ref="canvas"></canvas>
+    <div class="content">
+      <h1>Building Awesome Stuff</h1>
+    </div>
   </div>
 </template>
 
